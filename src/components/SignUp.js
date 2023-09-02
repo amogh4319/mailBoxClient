@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Card, Form, FormControl,Button,Spinner} from 'react-bootstrap';
+import {Card, Form, FormControl,Button,Spinner, Alert} from 'react-bootstrap';
 import './SignUp.css'
 import { useNavigate } from 'react-router-dom';
 
@@ -67,7 +67,7 @@ function SignUp() {
 
   return (
     <div>
-        
+        {isLogin&&<Alert variant='success'>successfully logged in!!!</Alert>}
       <Card className='mt-5 me-auto card shadow'>
         <Card.Title className='mb-3 mt-3'>{isLogin?'LOG IN':'SIGN UP'}</Card.Title>
         <Form className='form' onSubmit={submission}>
