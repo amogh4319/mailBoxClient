@@ -1,0 +1,13 @@
+.card{
+    display:flex;
+   
+    width: 25%;
+    margin: auto;
+    align-content: center;
+    text-align: center;
+}
+.form{
+    margin: auto;
+    text-align: center;
+    width:80%;
+}
