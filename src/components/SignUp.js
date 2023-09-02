@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {Card, Form, FormControl,Button,Spinner} from 'react-bootstrap';
 import './SignUp.css'
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
     const [email,setEmail]=useState('');
@@ -8,6 +9,8 @@ function SignUp() {
     const [confirm,setConfirm]=useState('');
     const [isLogin,setIsLogin]=useState(false);
     const [isLoading,setIsLoading]=useState(false);
+
+    const history=useNavigate();
 
     const emailHandler=(event)=>{
        setEmail(event.target.value)
@@ -48,6 +51,7 @@ function SignUp() {
         const data=await response.json();
         
         console.log(data);
+        history('/welcome');
         console.log('successfully loginned!!!')
         setEmail('');
         setPassword('');
