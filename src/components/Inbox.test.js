@@ -1,9 +1,11 @@
 import { render,screen } from "@testing-library/react"
 import Inbox from "./Inbox"
+import { Provider } from "react-redux";
+
 
 describe('inbox component',()=>{
     test('rendering inbox text',()=>{
-        render(<Inbox/>);
+        render(<Provider><Inbox/></Provider>);
         const inboxText=screen.getByText('Inbox');
         expect(inboxText).toBeInTheDocument();
     })
@@ -76,5 +78,29 @@ describe('inbox component',()=>{
         render(<Inbox />);
         const errorMessage = await screen.findByText('Failed to fetch sent emails');
         expect(errorMessage).toBeInTheDocument();
+      });
+      test('displays blue dot for unread messages', () => {
+        render(<Inbox />);
+        
+        const blueDotElements = screen.getAllByAltText('bluedot');
+        
+        // Check that there are blue dot elements for unread messages
+        expect(blueDotElements.length).toBe(1); // Assuming one unread message in the mock data
+      });
+      test('displays "read" badge for read messages', () => {
+        render(<Inbox />);
+        
+        const readBadgeElements = screen.getAllByText('read');
+        
+        // Check that there are "read" badge elements for read messages
+        expect(readBadgeElements.length).toBe(1); // Assuming one read message in the mock data
+      });
+      test('displays "unread" badge for unread messages', () => {
+        render(<Inbox />);
+        
+        const unreadBadgeElements = screen.getAllByText('unread');
+        
+        // Check that there are "unread" badge elements for unread messages
+        expect(unreadBadgeElements.length).toBe(1); // Assuming one unread message in the mock data
       });
 })

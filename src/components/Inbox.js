@@ -15,7 +15,7 @@ import { useNavigate} from 'react-router-dom';
 
 const Inbox = () => {
   const [messages, setInboxEmails] = useState([]);
-  const recieverEmail = JSON.parse(localStorage.getItem('email')); // Get the sender's email from localStorage
+  const recieverEmail = (localStorage.getItem('email')); // Get the sender's email from localStorage
   
   const dispatch=useDispatch();
   const history=useNavigate()
