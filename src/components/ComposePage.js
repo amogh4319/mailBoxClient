@@ -10,18 +10,37 @@ const ComposePage = () => {
   const [content,setContent]=useState('');
   const [send,setSend]=useState('');
   const [subject,setSubject]=useState('');
+  const Email=JSON.parse(localStorage.getItem('email'));
+console.log(Email);
+
+  // const isValidEmail = (email) => {
+  //   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  //   return emailPattern.test(email);
+  // };
   
-  const submission=async(event)=>{
+  // // Validate email address format
+  // if (!isValidEmail(send)) {
+  //   alert('Please enter a valid email address');
+  //   return;
+  // }
+
+
+ const submission=async(event)=>{
     event.preventDefault();
    
     console.log(send,subject,content);
     try{
-    const response=await fetch('https://mailbox-auth-5bce1-default-rtdb.firebaseio.com/mailData.json',{
+    const response=await fetch(`https://mailbox-auth-5bce1-default-rtdb.firebaseio.com/mailData.json`,{
       method:'POST',
       body:JSON.stringify({
-        email:send,
+        id:Math.random().toString(),
+        senderMail:Email,
+        recieverMail:send,
         subject:subject,
-        content:content
+        content:content,
+        timestamp: new Date().toISOString(),
+        isRead:false,
+        unreadCount:0,
       }),
       headers:{
         'Content-Type':'application/json'

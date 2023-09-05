@@ -1,9 +1,10 @@
 import {render,screen} from '@testing-library/react';
 import ComposePage from './ComposePage';
+import { BrowserRouter } from 'react-router-dom';
 
 describe('compose page component',()=>{
     test('rendering to text',()=>{
-        render(<ComposePage/>);
+        render(<BrowserRouter><ComposePage/></BrowserRouter>);
         const totext=screen.getByText('To');
         expect(totext).toBeInTheDocument();
     })

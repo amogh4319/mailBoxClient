@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import {Card, Form, FormControl,Button,Spinner, Alert} from 'react-bootstrap';
+import {Card, Form, FormControl,Button,Spinner} from 'react-bootstrap';
 import './SignUp.css'
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../store/auth';
+import {inboxActions} from '../store/inbox'
+
 
 function SignUp() {
     const [email,setEmail]=useState('');
@@ -9,6 +13,8 @@ function SignUp() {
     const [confirm,setConfirm]=useState('');
     const [isLogin,setIsLogin]=useState(false);
     const [isLoading,setIsLoading]=useState(false);
+    const dispatch=useDispatch();
+    
 
     const history=useNavigate();
 
@@ -51,7 +57,12 @@ function SignUp() {
         const data=await response.json();
         
         console.log(data);
-        history('/welcome');
+        localStorage.setItem('email',JSON.stringify(email))
+        dispatch(authActions.login(data.idToken));
+        
+        
+        
+        history('/inbox');
         console.log('successfully loginned!!!')
         setEmail('');
         setPassword('');
@@ -67,7 +78,7 @@ function SignUp() {
 
   return (
     <div>
-        {isLogin&&<Alert variant='success'>successfully logged in!!!</Alert>}
+        <div className='blue-dot'></div>
       <Card className='mt-5 me-auto card shadow'>
         <Card.Title className='mb-3 mt-3'>{isLogin?'LOG IN':'SIGN UP'}</Card.Title>
         <Form className='form' onSubmit={submission}>
@@ -81,7 +92,7 @@ function SignUp() {
             {isLoading&&<Spinner animation="border" variant="success" className='mt-3 mb-3'/>}
         </Form>
       </Card>
-      <Button onClick={toggle} style={{marginLeft:'44%',width:'fit-content'}} variant={!isLogin?'primary':'warning'} className='mt-5'>{!isLogin?'Have an account? Login':'Register'}</Button>
+      <Button onClick={toggle} style={{marginLeft:'44%',width:'fit-content'}} variant={!isLogin?'primary':'warning'} className='mt-5'>{!isLogin?'Have an account? Login':'Dont have an account?Sign up'}</Button>
     </div>
   );
 
