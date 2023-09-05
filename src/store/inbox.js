@@ -27,6 +27,20 @@ const inboxSlice=createSlice({
       state.unreadCount = action.payload;
       localStorage.setItem('unreadCount', state.unreadCount);
     },
+    deleteMessage(state, action) {
+      const messageId = action.payload;
+
+      // Remove the deleted message from the messages array
+      state.messages = state.messages.filter((message) => message.id !== messageId);
+
+      // Update the unreadCount if the deleted message was unread
+      if (!state.readStatus[messageId]) {
+        state.unreadCount -= 1;
+      }
+
+      // Remove the message from readStatus
+      delete state.readStatus[messageId];
+    },
     
    
 

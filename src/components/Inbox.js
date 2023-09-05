@@ -1,6 +1,6 @@
 
 import React, { useEffect,useState } from 'react';
-import { ListGroup, ListGroupItem,Badge } from 'react-bootstrap';
+import { ListGroup, ListGroupItem,Badge, Button } from 'react-bootstrap';
 import { useDispatch} from 'react-redux';
 import { inboxActions } from '../store/inbox';
 import bluedot from '../assets/bluedot.png'
@@ -15,7 +15,7 @@ import { useNavigate} from 'react-router-dom';
 
 const Inbox = () => {
   const [messages, setInboxEmails] = useState([]);
-  const recieverEmail = (localStorage.getItem('email')); // Get the sender's email from localStorage
+  const recieverEmail = JSON.parse(localStorage.getItem('email')); // Get the sender's email from localStorage
   
   const dispatch=useDispatch();
   const history=useNavigate()
@@ -95,10 +95,8 @@ const Inbox = () => {
     console.error('Failed to update isRead status in Firebase:', error);
   }
   }
-  
-  
-  
 
+ 
   return (
    
     <div >
@@ -125,7 +123,7 @@ const Inbox = () => {
               <Badge bg="primary" pill>
                 <strong>Date:</strong> {new Date(message.timestamp).toLocaleString()}
               </Badge>
-              {console.log(message.id)}
+              
               
             </ListGroupItem>
       

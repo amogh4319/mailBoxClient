@@ -4,7 +4,7 @@ import './SignUp.css'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../store/auth';
-import {inboxActions} from '../store/inbox'
+
 
 
 function SignUp() {
