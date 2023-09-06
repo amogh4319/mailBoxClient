@@ -1,11 +1,17 @@
 // SentBox.js
 import React, { useEffect, useState } from 'react';
 import { ListGroup, ListGroupItem,Badge } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { sentboxActions } from '../store/sentbox';
+import { useDispatch, useSelector } from 'react-redux';
 
 const SentBox = () => {
   const [sentEmails, setSentEmails] = useState([]);
   const senderEmail = JSON.parse(localStorage.getItem('email')); // Get the sender's email from localStorage
-  
+  const history=useNavigate()
+  const dispatch=useDispatch()
+  //const messages=useSelector(state=>state.sentbox.sentMessages);
+
   useEffect(() => {
     const fetchSentEmails = async () => {
       try {
@@ -14,10 +20,24 @@ const SentBox = () => {
           throw new Error('Failed to fetch sent emails');
         }
         const data = await response.json();
-        let sentEmailList=[];
+        let loader=[];
+        for(let key in data){
+          loader.push({
+            id:key,
+            senderMail:data[key].Email,
+            recieverMail:data[key].send,
+            subject:data[key].subject,
+            content:data[key].content,
+            timestamp:new Date().toISOString(),
+            isRead:false,
+          })
+        }
+        setSentEmails(loader)
         if (data) {
-          sentEmailList = Object.values(data).filter((email)=>email.senderMail===senderEmail);
-          setSentEmails(sentEmailList);
+          const sentboxEmailList = Object.values(data).filter((email)=>email.senderMail===senderEmail);
+          dispatch(sentboxActions.loadMessages(sentboxEmailList));
+          setSentEmails(sentboxEmailList);
+          
         }
       } catch (error) {
         console.error(error.message);
@@ -25,14 +45,21 @@ const SentBox = () => {
     };
 
     fetchSentEmails();
-  }, [senderEmail]);
+  }, [senderEmail,dispatch]);
+  const clickHandler=(messageId)=>{
+    const updatedMessages = sentEmails.map((message) =>
+    message.id === messageId ? { ...message, isRead: true } : message
+  );
+  setSentEmails(updatedMessages);
+    history(`/sentbox/${messageId}`);
+  }
 
   return (
     <div >
       <h2 style={{textAlign:'center'}}>Sent Box</h2>
-      <ListGroup as='ol' style={{width:'90%',margin:'1rem'}} className='shadow'>
-        {sentEmails.map((email, index) => (
-          <ListGroupItem as='li' key={index} className="d-flex justify-content-between align-items-start">
+      <ListGroup as='ol' style={{width:'90%',margin:'1rem'}} >
+        {sentEmails.map((email) => (
+          <ListGroupItem as='li' key={email.id} className="d-flex justify-content-between align-items-start shadow" onClick={()=>clickHandler(email.id)}>
             <div className="ms-2 me-auto">
                 <div className="fw-bold"><strong>Recipient:</strong> {email.recieverMail}</div>
                 <strong>Subject:</strong> {email.subject}
