@@ -32,19 +32,7 @@ const Inbox = () => {
           
         }
         const data = await response.json();
-        let loader=[];
-        for(let key in data){
-          loader.push({
-            id:key,
-            senderMail:data[key].Email,
-            recieverMail:data[key].send,
-            subject:data[key].subject,
-            content:data[key].content,
-            timestamp:new Date().toISOString(),
-            isRead:false,
-          })
-        }
-        setInboxEmails(loader)
+        
         if (data) {
           const inboxEmailList = Object.values(data).filter((email)=>recieverEmail===email.recieverMail);
           setInboxEmails(inboxEmailList);
@@ -57,6 +45,13 @@ const Inbox = () => {
     };
 
     fetchRecievedEmails();
+    // Set up an interval to call the function every 2 seconds
+  const intervalId = setInterval(fetchRecievedEmails, 2000);
+
+  // Clean up the interval when the component unmounts
+  return () => {
+    clearInterval(intervalId);
+  };
     
   }, [dispatch,recieverEmail]);
  
@@ -65,7 +60,7 @@ const Inbox = () => {
     message.id === messageId ? { ...message, isRead: true } : message
   );
   setInboxEmails(updatedMessages);
-  dispatch(inboxActions.messageRead());
+  //dispatch(inboxActions.messageRead());
 
   // Update the read status in Redux store
   dispatch(inboxActions.updateReadStatus({ messageId, isRead: true }));
