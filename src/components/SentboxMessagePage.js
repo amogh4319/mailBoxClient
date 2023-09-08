@@ -1,6 +1,6 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import {Badge,Card} from 'react-bootstrap'
+import { useNavigate, useParams } from 'react-router-dom';
+import {Badge,Button,Card} from 'react-bootstrap'
 
 function SentboxMessagePage({sentMessages}) {
     const { messageId } = useParams();
@@ -8,6 +8,7 @@ function SentboxMessagePage({sentMessages}) {
     console.log(sentMessages)
   const messageIdString = messageId.toString();
   const message = sentMessages.find((message) => message.id === messageIdString);
+  const history=useNavigate()
 
   if (!message) {
     return <div>Message not found</div>;
@@ -23,6 +24,9 @@ function SentboxMessagePage({sentMessages}) {
       <Badge style={{width:'fit-content' }}>Subject:</Badge><h3><i>{subject}</i></h3>
       <hr />
       <p>{content}</p>
+      <div>
+        <Button variant='secondary' onClick={()=>history('/sentbox')}>Go back</Button>
+      </div>
       </Card>
     </div>
   );
